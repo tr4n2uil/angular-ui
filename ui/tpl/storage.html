@@ -5,7 +5,7 @@
 		<form ng-submit="saveNote()"><input type="text" class="form-control" ng-model="newnote.data" id="newnote" placeholder="New Note" /></form>
 	</div>
 
-	<div class="" style="margin: 3.5em 0;">
+	<div class="" style="margin: 2.5em 0;">
 		<table class="table" ng-init="notes">
 			<tbody>
 				<tr ng-repeat="note in notes | reverse">
@@ -16,3 +16,5 @@
 		</table>
 	</div>
 </div>
+
+<div ng-include src="footerURL"></div>

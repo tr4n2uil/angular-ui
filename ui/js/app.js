@@ -42,6 +42,7 @@ var APP = angular.module('APP', ['ngRoute', 'ngSanitize', 'Storage', 'DB'])
 		function($scope, $timeout, $location, Storage) {
 			$scope.minHeight=$(window).height()-3;
 			$scope.headerURL = 'ui/tpl/header.html';
+			$scope.footerURL = 'ui/tpl/footer.html';
 
 			$scope.log = function(data){
 				console.log(data);
