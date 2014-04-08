@@ -1,20 +1,19 @@
 <div ng-include src="headerURL"></div>
 
-<div class="h2">Demo - Angular Storage</div>
-
-<div class="" style="margin: 3em 0;">
-
-	<div>
-		<form ng-submit="saveNote()"><input type="text" class="form-control" ng-model="newnote.data" id="newnote" /></form>
+<div class='body'>
+	<div style="margin: 2em 0;">
+		<form ng-submit="saveNote()"><input type="text" class="form-control" ng-model="newnote.data" id="newnote" placeholder="New Note" /></form>
 	</div>
 
-	<table class="table" ng-init="notes">
-		<thead><th style="width: 5em;"><a ng-click="newnote={}">New</a></th><th>Notes</th></thead>
-		<tbody>
-			<tr ng-repeat="note in notes">
-				<td><a ng-click="removeNote(note, $index)">{{ $index+1 }}</a></td>
-				<td>{{ note.data }}</td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="" style="margin: 3em 0;">
+		<table class="table" ng-init="notes">
+			<thead><th style="width: 5em;"></th><th>Notes</th></thead>
+			<tbody>
+				<tr ng-repeat="note in notes | reverse">
+					<td>{{ $index+1 }} <a ng-click="removeNote(note, notes.length - $index - 1)" class="pull-right"><span class="glyphicon glyphicon-remove"></span></a></td>
+					<td>{{ note.data }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>

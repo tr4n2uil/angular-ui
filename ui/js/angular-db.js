@@ -8,13 +8,26 @@ angular.module( 'DB', [ 'Storage' ] )
 			return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 		}
 
+		var autoid = function(){
+			var name = 'autoid';
+			var r = Storage.find( name );
+			if( !r ) {
+				r = 1;
+				Storage.save( r, name );
+			}
+			r++;
+			Storage.save( r, name );
+			return String(r);
+		}
+
 		var db = {};
 
 		db.collection = function( name ){
 			var r = Storage.find( name );
 			if( !r ){
 				r = {};
-				r.id = uuid();
+				r.id = autoid();
+				r.uuid = uuid();
 				r.objects = [];
 				Storage.save( r, name );
 			}
@@ -33,7 +46,8 @@ angular.module( 'DB', [ 'Storage' ] )
 		db.save = function( name, object ){
 			// create
 			if( object['id'] || false ){} else {
-				object.id = uuid();
+				object.id = autoid();
+				object.uuid = uuid();
 
 				var collection = db.collection( name );
 				collection.objects.push( object.id );

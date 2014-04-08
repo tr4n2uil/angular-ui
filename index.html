@@ -38,12 +38,10 @@
     </head>
 
     <body ng-controller='init'>
-        <div class='body'>
-            <div ng-show='loader' class='loading'>
-                <img src='ui/img/loader.gif'>
-            </div>
-        
-            <div ng-view></div>
+        <div ng-show='loader' class='loading'>
+            <img src='ui/img/loader.gif'>
         </div>
+    
+        <div ng-view></div>
     </body>
 </html>

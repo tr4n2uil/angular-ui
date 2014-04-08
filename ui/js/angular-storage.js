@@ -16,8 +16,8 @@ angular.module( 'Storage', [] )
 			store[key || object.id] = JSON.stringify( object );
 		}
 
-		storage.remove = function( object ){
-			delete store[object.id];
+		storage.remove = function( key ){
+			delete store[key];
 		}
 
 		storage.find = function( id ){
@@ -27,7 +27,7 @@ angular.module( 'Storage', [] )
 		window.Storage = storage;
 		window.Store = store;
 		return storage;
-		
+
 	}]);
 
 /*

@@ -3,8 +3,8 @@ var APP = angular.module('APP', ['ngRoute', 'ngSanitize', 'Storage', 'DB'])
 	.config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvider){
 
 		$routeProvider
-			.when('/', {templateUrl: 'ui/tpl/home.html', controller: "init"})
-			.when('/demo/storage', {templateUrl: 'ui/tpl/storage.html', 
+			//.when('/', {templateUrl: 'ui/tpl/home.html', controller: "init"})
+			.when('/', {templateUrl: 'ui/tpl/storage.html', 
 				controller: ['$scope', '$timeout', '$location', 'Storage', 'DB', function($scope, $timeout, $location, Storage, DB) {
 					$scope.notes = DB.query( 'notes' );
 
@@ -12,7 +12,7 @@ var APP = angular.module('APP', ['ngRoute', 'ngSanitize', 'Storage', 'DB'])
 						if($scope.newnote && $scope.newnote.data || false){
 							DB.save( 'notes', $scope.newnote );
 
-							$scope.notes.unshift($scope.newnote);
+							$scope.notes.push($scope.newnote);
 							$scope.newnote = {};
 						}
 					}
@@ -30,6 +30,12 @@ var APP = angular.module('APP', ['ngRoute', 'ngSanitize', 'Storage', 'DB'])
 		$httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 	}])
+
+	.filter('reverse', function() {
+		return function(items) {
+			return items.slice().reverse();
+		};
+	})
 
 	.controller('init', ['$scope', '$timeout', '$location', 'Storage',
 
