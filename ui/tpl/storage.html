@@ -5,12 +5,11 @@
 		<form ng-submit="saveNote()"><input type="text" class="form-control" ng-model="newnote.data" id="newnote" placeholder="New Note" /></form>
 	</div>
 
-	<div class="" style="margin: 3em 0;">
+	<div class="" style="margin: 3.5em 0;">
 		<table class="table" ng-init="notes">
-			<thead><th style="width: 5em;"></th><th>Notes</th></thead>
 			<tbody>
 				<tr ng-repeat="note in notes | reverse">
-					<td>{{ $index+1 }} <a ng-click="removeNote(note, notes.length - $index - 1)" class="pull-right"><span class="glyphicon glyphicon-remove"></span></a></td>
+					<td style="width: 4em;">{{ $index+1 }} <a ng-click="removeNote(note, notes.length - $index - 1)" class="pull-right"><span class="glyphicon glyphicon-remove"></span></a></td>
 					<td>{{ note.data }}</td>
 				</tr>
 			</tbody>
