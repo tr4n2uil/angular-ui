@@ -1,3 +1,13 @@
+/**
+ *	Angular Local Storage Implementation
+ *
+ *	Vibhaj Rajan <vibhaj8@gmail.com>
+ *
+ *	Licensed under MIT License 
+ *	http://www.opensource.org/licenses/mit-license.php
+ *
+**/
+
 angular.module( 'Storage', [] )
 	.factory( 'Storage', [ function() {
 		var store = {};
@@ -12,83 +22,69 @@ angular.module( 'Storage', [] )
 
 		var storage = {};
 
-		storage.save = function( object, key ){
-			store[key || object.id] = JSON.stringify( object );
+		storage.autoid = function(callback){
+			var name = 'autoid';
+			var r = store[ name ] || false;
+			if( !r ) {
+				store[ name ] = r = 1;
+			}
+			r++;
+			store[ name ] = r;
+
+			var data = String(r);
+			if(callback) callback(data);
+			return data;
 		}
 
-		storage.remove = function( key ){
-			delete store[key];
+		storage.uuid = function(){
+			function s4() {
+				return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+			}
+
+			return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 		}
 
-		storage.find = function( id ){
-			return JSON.parse( store[id] || "false" );
+		storage.query = function( key, callback ){
+			if(Array.isArray(key)){
+				var data = [];
+				for( var i in key ){
+					data.push(JSON.parse(store[key[i]] || "false"));
+				}
+			}
+			else {
+				var data = JSON.parse(store[key] || "false");
+			}
+			
+			if(callback) callback(data);
+			return data;
 		}
 
-		window.Storage = storage;
+		storage.save = function( key, object, callback ){
+			if(!key) key = object.id || storage.autoid();
+			if(!object.id) object.id = key;
+			if(!object.uuid) object.uuid = storage.uuid();
+
+			store[key] = JSON.stringify( object );
+			
+			if(callback) callback(object);
+			return object;
+		}
+
+		storage.remove = function( key, callback ){
+			if(Array.isArray(key)){
+				for( var i in key ){
+					delete store[key[i]];
+				}
+			}
+			else {
+				delete store[key];
+			}
+			
+			if(callback) callback();
+		}
+
 		window.Store = store;
 		return storage;
 
 	}]);
 
-/*
-
-		var store = {};
-
-		store.save = function( object ) {
-			for( var key in object ){
-				switch( typeof( object[key] ) ){
-					case 'object':
-						if( Array.isArray( object[key] ) ){
-							for( var o in object[key] ){
-								if( typeof( object[key][o] ) == 'object' && object[key][o].id != object.id ){
-									store.save(object[key][o]);
-								}
-							}	
-						}
-						else {
-							if( object[key].id != object.id ){
-								store.save(object[key]);
-							}
-						}
-						break;
-
-					default:
-						break;
-				}
-			}
-
-			console.log( object );
-			storage[object.id] = JSON.stringify( object.serialize() );
-		};
-
-		store.container = function( key ){
-			if( storage[key] || false ){
-				return storage[key];
-			}
-			else {
-				var obj = new Model();
-				obj.objects = [];
-				store.save( obj );
-				storage[key] = obj.id;
-				return storage[key];
-			}
-		}
-
-		store.find = function( id ){
-			if( storage[id] || false ){
-				return Model.fromObject(JSON.parse( storage[id] ));	
-			}
-			return false;
-		}
-
-		store.gather = function( list ){
-			var r = [];
-			for( var i in list ){
-				r.push( store.find( list[i] ) );
-			}
-			return r;
-		}
-
-		return store;
-	}]);
-*/

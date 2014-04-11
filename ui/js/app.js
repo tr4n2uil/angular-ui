@@ -1,31 +1,21 @@
+/**
+ *	Angular UI Easy Notes Application
+ *
+ *	Vibhaj Rajan <vibhaj8@gmail.com>
+ *
+ *	Licensed under MIT License 
+ *	http://www.opensource.org/licenses/mit-license.php
+ *
+**/
+
 var APP = angular.module('APP', ['ngRoute', 'ngSanitize', 'Storage', 'DB'])
 
 	.config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvider){
 
 		$routeProvider
 			//.when('/', {templateUrl: 'ui/tpl/home.html', controller: "init"})
-			.when('/', {templateUrl: 'ui/tpl/storage.html', 
-				controller: ['$scope', 'DB', function($scope, DB) {
-					$scope.book = DB.get( 'easy-notes' );
-					if( !$scope.book ){
-						$scope.book = { name: 'Easy Notes' };
-						DB.save( 'books', $scope.book, 'easy-notes' );
-					}
-
-					$scope.books = DB.query( 'books' );
-					$scope.notes = DB.query( 'book.'+ $scope.book.id +'.notes' );
-					$('#newnote').focus();
-				}]
-			})
-
-			.when('/book/:id', {templateUrl: 'ui/tpl/storage.html', 
-				controller: ['$scope', 'DB', '$routeParams', function($scope, DB, $routeParams) {
-					$scope.book = DB.get( $routeParams.id );
-					$scope.books = DB.query( 'books' );
-					$scope.notes = DB.query( 'book.'+ $scope.book.id +'.notes' );
-					$('#newnote').focus();
-				}]
-			});
+			.when('/', {templateUrl: 'ui/tpl/storage.html', controller: 'book'})
+			.when('/book/:id', {templateUrl: 'ui/tpl/storage.html', controller: 'book'});
 		
 		$httpProvider.defaults.headers.post['Content-Type'] = 'application/json';
 		$httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
@@ -39,7 +29,6 @@ var APP = angular.module('APP', ['ngRoute', 'ngSanitize', 'Storage', 'DB'])
 	})
 
 	.controller('init', ['$scope', '$timeout', '$location', '$route', 'Storage', 'DB',
-
 		function($scope, $timeout, $location, $route, Storage, DB) {
 			$scope.minHeight=$(window).height()-3;
 			$scope.headerURL = 'ui/tpl/header.html';
@@ -69,5 +58,18 @@ var APP = angular.module('APP', ['ngRoute', 'ngSanitize', 'Storage', 'DB'])
 				$location.path('/');
 			}
 		}
+	])
 
+	.controller('book', ['$scope', 'DB', '$routeParams', 
+		function($scope, DB, $routeParams) {
+			$scope.book = DB.get( $routeParams.id || 'easy-notes' );
+			if( !$scope.book ){
+				$scope.book = { name: 'Easy Notes' };
+				DB.save( 'books', $scope.book, 'easy-notes' );
+			}
+
+			$scope.books = DB.query( 'books' );
+			$scope.notes = DB.query( 'book.'+ $scope.book.id +'.notes' );
+			$('#newnote').focus();
+		}
 	]);
