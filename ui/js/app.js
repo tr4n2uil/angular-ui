@@ -57,6 +57,25 @@ var APP = angular.module('APP', ['ngRoute', 'ngSanitize', 'Storage', 'DB'])
 				DB.remove( 'books', book );
 				$location.path('/');
 			}
+
+			$scope.export = function(){
+				var bb = new Blob([Storage.export()], {type: 'application/json'});
+				var a = document.createElement('a');
+				a.download = 'easy-notes-data.json';
+				a.href = window.URL.createObjectURL(bb);
+				a.textContent = 'Download Book';
+				a.dataset.downloadurl = ['application/json', a.download, a.href].join(':');
+				a.click();
+			}
+
+			$scope.import = function(){
+				var file = $('#upload-file').get(0).files[0];
+				console.log(file);
+				Storage.import(file, function(){
+					$location.path('/');
+					$route.reload();
+				});
+			}
 		}
 	])
 
@@ -73,3 +92,12 @@ var APP = angular.module('APP', ['ngRoute', 'ngSanitize', 'Storage', 'DB'])
 			$('#newnote').focus();
 		}
 	]);
+
+
+
+/*
+window.onbeforeunload = confirmExit;
+function confirmExit(){
+    return confirm("Save your data. Confirm exit?");
+}
+*/

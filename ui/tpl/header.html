@@ -11,16 +11,28 @@
 			</div>
 			<!--<div class="h4">Easy Notes</div>-->
 		</div>
-		<div class="col-xs-2 no-padding">
+		<div class="col-xs-1 no-padding">
+			<div class="pull-right dropdown">
+				<a data-toggle="dropdown" class="dropdown-toggle pointer inline-block" style="font-size: 2em; padding: 0.45em 0 0 0.5em; color: #bbb;">
+					<span class="glyphicon glyphicon-cog"></span>
+					<!--<div class="col-md-1 no-padding"><span class="caret"></span></div>-->
+				</a>
+				<ul class="dropdown-menu">
+					<li><a ng-click="newBook()">New Book</a></li>
+					<li><a ng-click="deleteBook(book)">Delete Book</a></li>
+					<li class="divider"></li>
+					<li><a ng-click="export()">Export Data</a></li>
+					<li><a onclick="$('#upload-file').click()">Import Data</a><input id="upload-file" style="display: none;" type="file" ng-model="uploadfile" ng-change="import()"></li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-xs-1 no-padding">
 			<div class="pull-right dropdown">
 				<a data-toggle="dropdown" class="dropdown-toggle pointer inline-block" style="font-size: 2em; padding: 0.45em 0 0 0.5em; color: #858585;">
 					<span class="glyphicon glyphicon-align-justify"></span>
 					<!--<div class="col-md-1 no-padding"><span class="caret"></span></div>-->
 				</a>
 				<ul class="dropdown-menu">
-					<li><a ng-click="newBook()" class="dim">New Book</a></li>
-					<li><a ng-click="deleteBook(book)" class="dim">Delete Book</a></li>
-					<li class="divider"></li>
 					<li ng-repeat="b in books"><a ng-href="#/book/{{b.id}}/">{{b.name}}</a></li>
 				</ul>
 			</div>

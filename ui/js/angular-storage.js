@@ -83,6 +83,30 @@ angular.module( 'Storage', [] )
 			if(callback) callback();
 		}
 
+		storage.export = function(){
+			return JSON.stringify(store);
+		}
+
+		storage.import = function(file, callback){
+			var reader = new FileReader();
+			reader.onload = function(event) {
+				var contents = event.target.result;
+
+				var data = JSON.parse(contents);
+				store.clear();
+				for(var i in data){
+					store[i] = data[i];
+				}
+
+				if(callback) callback();
+			};
+
+			reader.onerror = function(event) {
+				console.error("File could not be read! Code " + event.target.error.code);
+			};
+			reader.readAsText(file);
+		}
+
 		window.Store = store;
 		return storage;
 
