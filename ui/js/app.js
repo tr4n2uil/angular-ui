@@ -5,23 +5,24 @@ var APP = angular.module('APP', ['ngRoute', 'ngSanitize', 'Storage', 'DB'])
 		$routeProvider
 			//.when('/', {templateUrl: 'ui/tpl/home.html', controller: "init"})
 			.when('/', {templateUrl: 'ui/tpl/storage.html', 
-				controller: ['$scope', '$timeout', '$location', 'Storage', 'DB', function($scope, $timeout, $location, Storage, DB) {
-					$scope.notes = DB.query( 'notes' );
-
-					$scope.saveNote = function(){
-						if($scope.newnote && $scope.newnote.data || false){
-							DB.save( 'notes', $scope.newnote );
-
-							$scope.notes.push($scope.newnote);
-							$scope.newnote = {};
-						}
+				controller: ['$scope', 'DB', function($scope, DB) {
+					$scope.book = DB.get( 'easy-notes' );
+					if( !$scope.book ){
+						$scope.book = { name: 'Easy Notes' };
+						DB.save( 'books', $scope.book, 'easy-notes' );
 					}
 
-					$scope.removeNote = function(note, index){
-						DB.remove( 'notes', note );
-						$scope.notes.splice( index, 1 );
-					}
+					$scope.books = DB.query( 'books' );
+					$scope.notes = DB.query( 'book.'+ $scope.book.id +'.notes' );
+					$('#newnote').focus();
+				}]
+			})
 
+			.when('/book/:id', {templateUrl: 'ui/tpl/storage.html', 
+				controller: ['$scope', 'DB', '$routeParams', function($scope, DB, $routeParams) {
+					$scope.book = DB.get( $routeParams.id );
+					$scope.books = DB.query( 'books' );
+					$scope.notes = DB.query( 'book.'+ $scope.book.id +'.notes' );
 					$('#newnote').focus();
 				}]
 			});
@@ -37,16 +38,35 @@ var APP = angular.module('APP', ['ngRoute', 'ngSanitize', 'Storage', 'DB'])
 		};
 	})
 
-	.controller('init', ['$scope', '$timeout', '$location', 'Storage',
+	.controller('init', ['$scope', '$timeout', '$location', '$route', 'Storage', 'DB',
 
-		function($scope, $timeout, $location, Storage) {
+		function($scope, $timeout, $location, $route, Storage, DB) {
 			$scope.minHeight=$(window).height()-3;
 			$scope.headerURL = 'ui/tpl/header.html';
 			$scope.footerURL = 'ui/tpl/footer.html';
+			$scope.DB = DB;
 
 			$scope.log = function(data){
 				console.log(data);
 				return true;
+			}
+
+			$scope.refresh = function(){
+				$route.reload();
+				return true;
+			}
+
+			$scope.newBook = function(){
+				var book = { name: 'Untitled Notes' };
+				DB.save( 'books', book );
+				console.log( $scope.book );
+				$location.path( '/book/' + book.id );
+			}
+
+			$scope.deleteBook = function( book ){
+				DB.drop( 'book.'+ book.id +'.notes' );
+				DB.remove( 'books', book );
+				$location.path('/');
 			}
 		}
 

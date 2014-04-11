@@ -2,14 +2,16 @@
 
 <div class='body'>
 	<div style="margin: 2em 0;">
-		<form ng-submit="saveNote()"><input type="text" class="form-control" ng-model="newnote.data" id="newnote" placeholder="New Note" /></form>
+		<form ng-submit="DB.save( 'book.'+ book.id +'.notes', newnote ) && notes.push(newnote) && (newnote={})">
+			<input type="text" class="form-control full" ng-model="newnote.data" id="newnote" placeholder="New Note" />
+		</form>
 	</div>
 
 	<div class="" style="margin: 2.5em 0;">
 		<table class="table" ng-init="notes">
 			<tbody>
 				<tr ng-repeat="note in notes | reverse">
-					<td style="width: 4em;">{{ $index+1 }} <a ng-click="removeNote(note, notes.length - $index - 1)" class="pull-right"><span class="glyphicon glyphicon-remove"></span></a></td>
+					<td style="width: 4em;">{{ $index+1 }} <a ng-click="DB.remove( 'book.'+ book.id +'.notes', note ) && notes.splice( notes.length - $index - 1, 1 )" class="pull-right"><span class="glyphicon glyphicon-remove"></span></a></td>
 					<td>{{ note.data }}</td>
 				</tr>
 			</tbody>

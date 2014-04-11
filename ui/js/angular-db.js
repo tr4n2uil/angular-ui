@@ -34,6 +34,10 @@ angular.module( 'DB', [ 'Storage' ] )
 			return r;
 		}
 
+		db.get = function( key ){
+			return Storage.find( key );
+		}
+
 		db.query = function( name ){
 			list = db.collection( name ).objects;
 			var r = [];
@@ -43,19 +47,19 @@ angular.module( 'DB', [ 'Storage' ] )
 			return r;
 		}
 
-		db.save = function( name, object ){
+		db.save = function( name, object, key ){
 			// create
 			if( object['id'] || false ){} else {
-				object.id = autoid();
+				object.id = key || autoid();
 				object.uuid = uuid();
 
 				var collection = db.collection( name );
-				collection.objects.push( object.id );
+				collection.objects.push( key || object.id );
 				Storage.save( collection, name );
 			}
 
 			// update 
-			Storage.save( object );
+			Storage.save( object, key );
 			return object;
 		}
 
@@ -66,6 +70,21 @@ angular.module( 'DB', [ 'Storage' ] )
 			Storage.save( collection, name );
 
 			Storage.remove( object.id );
+			return true;
+		}
+
+		db.drop = function( name ){
+			var collection = db.collection( name );
+
+			for( var i in collection.objects ){
+				Storage.remove( collection.objects[i].id );
+			}
+
+			Storage.remove( name );
+		}
+
+		db.clear = function(){
+			return Storage.clear();
 		}
 
 		window.DB = db;

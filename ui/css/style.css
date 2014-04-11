@@ -90,6 +90,12 @@ body {
 .clear {
   clear: both;
 }
+.no-padding {
+  padding: 0;
+}
+.inline-block {
+  display: inline-block;
+}
 @media all and (max-width: 340px) and (min-width: 320px) and (min-aspect-ratio: 4/3) {
   .body {
     width: 50%;
@@ -1150,11 +1156,6 @@ a {
   margin: 22% auto 0;
   display: block;
 }
-.btn {
-  border-radius: 0px;
-  -webkit-border-radius: 0px;
-  -moz-border-radius: 0px;
-}
 .rounded {
   max-height: 2em;
   max-width: 2em;
@@ -1163,7 +1164,7 @@ a {
   -moz-border-radius: 1em;
 }
 .dim {
-  color: #999;
+  color: #999 !important;
 }
 .round {
   border-radius: 17px;
@@ -1191,4 +1192,18 @@ a {
 .form-control {
   height: initial;
   font-size: inherit;
+  width: inherit;
+}
+.dropdown-menu {
+  font-size: inherit;
+  min-width: 10em;
+}
+.dropdown-menu > li > a {
+  padding: 0.3em 1.5em;
+}
+.dropdown-menu .divider {
+  margin: 0.5em 0;
+}
+.full {
+  width: 100%;
 }
