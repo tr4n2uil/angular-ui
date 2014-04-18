@@ -8,7 +8,7 @@
  *
 **/
 
-var APP = angular.module('APP', ['ngRoute', 'ngSanitize', 'Storage', 'DB'])
+var APP = angular.module('APP', ['ngRoute', 'ngSanitize', 'chieffancypants.loadingBar', 'Storage', 'DB'])
 
 	.config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvider){
 

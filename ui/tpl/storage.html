@@ -1,13 +1,13 @@
 <div ng-include src="headerURL"></div>
 
-<div class='body'>
-	<div style="margin: 2em 0;">
+<div class='body' style="margin: 6em auto 8em;">
+	<div style="margin: 1.5em 0;">
 		<form ng-submit="DB.save( 'book.'+ book.id +'.notes', newnote ) && notes.push(newnote) && (newnote={})">
 			<input type="text" class="form-control full" ng-model="newnote.data" id="newnote" placeholder="New Note" />
 		</form>
 	</div>
 
-	<div class="" style="margin: 2.5em 0;">
+	<div class="">
 		<table class="table" ng-init="notes">
 			<tbody>
 				<tr ng-repeat="note in notes | reverse">
